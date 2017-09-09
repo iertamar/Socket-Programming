@@ -1,0 +1,46 @@
+package socket;
+import java.net.*;
+import java.util.Scanner;
+
+public class UDPserver {
+    private final static int psize = 100;
+    public static void main(String[] args) {
+        try{
+            Scanner sc = new Scanner(System.in);
+            int port = 6336;
+            DatagramSocket socket = new DatagramSocket(port);
+            System.out.println("The server is ready....");
+            for(;;)
+            {
+                DatagramPacket packet = new DatagramPacket(new byte[psize] , psize);
+                DatagramPacket packet1 = new DatagramPacket(new byte[psize] , psize);
+                DatagramPacket packet2 = new DatagramPacket(new byte[psize] , psize);
+
+                socket.receive(packet);
+                socket.receive(packet1);
+                socket.receive(packet2);
+
+                String str =  new String(packet.getData());
+                String str1 =  new String(packet1.getData());
+                String str2 =  new String(packet2.getData());
+
+                System.out.println("Client's First IP is : "+ str);
+                System.out.println("Client's First IP is : "+ str1);
+                System.out.println("Client's Subnet Mask is : "+ str2);
+
+                // write function which will tell whether both IP's
+                // are in same network or in different network
+
+                String s = sc.nextLine();
+                byte []buffer = s.getBytes();
+                DatagramPacket clientPacket = new DatagramPacket
+                        (buffer , buffer.length,packet.getAddress(), packet.getPort());
+                socket.send(clientPacket);
+
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}

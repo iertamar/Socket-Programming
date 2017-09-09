@@ -1,0 +1,39 @@
+package socket;
+//import com.sun.corba.se.spi.activation.Server;
+
+import java.io.*;
+import java.net.*;
+
+public class myserver1 {
+    public static void main(String[] args){
+        try {
+            ServerSocket ss = new ServerSocket(3333);
+            Socket s = ss.accept();
+            DataInputStream din = new DataInputStream(s.getInputStream());
+            DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            String str = "", str1 = "", str2 = "", str3 = "";
+            while (!str.equals("stop")) {
+                str = din.readUTF();
+                System.out.println("client's first IP : " + str);
+                str1 = din.readUTF();
+                System.out.println("client's second IP : " + str);
+                str2 = din.readUTF();
+                System.out.println("client's subnet mask : " + str);
+                System.out.println("Data has received");
+
+                //function which calculates whether both ip are in
+                // same network or in different network
+                str3 = br.readLine();
+                dout.writeUTF(str3);
+                dout.flush();
+            }
+            br.close();
+            s.close();
+            ss.close();
+        }catch (Exception e)
+        {
+            System.out.println(e);
+        }
+    }
+}

@@ -1,0 +1,51 @@
+package socket;
+import java.net.*;
+import java.util.Scanner;
+
+public class UDPclient {
+    private final static int psize =100 ;
+    public static void main(String[] args) {
+        try
+        {
+            Scanner sc = new Scanner(System.in);
+        DatagramSocket socket = new DatagramSocket();
+            int a = 127;
+            byte b = (byte) a;
+            byte[] ipAddr = new byte[]{b, 16, 83, 92};
+            InetAddress host = InetAddress.getByAddress(ipAddr); //server's IP
+            System.out.println(host);
+            int port = Integer.parseInt("6336");
+            System.out.println("Enter First IP : ");
+            String s = sc.nextLine();
+            byte []data = s.getBytes();
+            DatagramPacket packet = new DatagramPacket(data , data.length, host, port);
+
+            System.out.println("Enter Second IP : ");
+            s = sc.nextLine();
+            data = s.getBytes();
+            DatagramPacket packet1 = new DatagramPacket(data , data.length, host, port);
+
+            System.out.println("Enter Subnet Mask : ");
+            s = sc.nextLine();
+            data = s.getBytes();
+            DatagramPacket packet2 = new DatagramPacket(data , data.length, host, port);
+
+            socket.send(packet);// client will send to server
+            socket.send(packet1);// client will send to server
+            socket.send(packet2);// client will send to server
+
+            packet.setData(new byte[psize]);
+            socket.receive(packet);// client will be blocked until
+                                   // client is not getting reply from server
+            System.out.println(new String(packet.getData()));// if we are in this line that
+                                                             //means we got reply from server
+            socket.close();
+
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+        }
+
+    }
+}
